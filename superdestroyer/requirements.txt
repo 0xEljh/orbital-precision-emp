@@ -2,3 +2,6 @@ flask
 requests
 python-dotenv
 web3
+networkx
+matplotlib
+python-louvain
