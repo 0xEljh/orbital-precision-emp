@@ -82,7 +82,12 @@ export default function Drops() {
           columnGap="8"
         >
           {airdrops.map((airdrop) => (
-            <Link key={airdrop.id} _hover={{ textDecor: "none" }} role="group">
+            <Link
+              key={airdrop.id}
+              _hover={{ textDecor: "none" }}
+              role="group"
+              href={`/claim/${airdrop.id}`}
+            >
               <Box
                 p="6"
                 bg="bg.surface"
