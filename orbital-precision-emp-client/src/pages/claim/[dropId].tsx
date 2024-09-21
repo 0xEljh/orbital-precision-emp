@@ -13,13 +13,14 @@ import {
   useDisclosure,
   Stack,
 } from "@chakra-ui/react";
-
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { IDKitWidget, VerificationLevel, useIDKit } from "@worldcoin/idkit";
+
+import { useUser } from "@/contexts";
+import { LoginCard } from "@/components/login";
 
 import type { Airdrop } from "@/types/drops";
-
-import { IDKitWidget, VerificationLevel, useIDKit } from "@worldcoin/idkit";
 
 // TODO: Fetch drop from the backend
 const drop = {
@@ -62,12 +63,12 @@ export default function AirdropClaimPage({
 }: {
   airdropDetails: Airdrop;
 }) {
+  const { user, loading } = useUser();
   const router = useRouter();
   const toast = useToast();
   const { setOpen } = useIDKit();
 
-  console.log(process.env.NEXT_PUBLIC_WORLDID_APP_ID);
-  console.log(process.env.NEXT_PUBLIC_WORLDID_ACTION_ID);
+  console.log(user);
 
   const [wallets, setWallets] = useState<string[]>([]);
   const [newWallet, setNewWallet] = useState("");
@@ -137,41 +138,44 @@ export default function AirdropClaimPage({
         <Heading as="h1" size="xl" textAlign="center">
           {airdropDetails.title}
         </Heading>
+        {user ? (
+          <Box as="form" onSubmit={handleSubmit}>
+            <VStack spacing={4} align="stretch">
+              <FormControl>
+                <FormLabel>Wallet Address</FormLabel>
+                <HStack>
+                  <Input
+                    value={newWallet}
+                    onChange={(e) => setNewWallet(e.target.value)}
+                    placeholder="Enter wallet address"
+                  />
+                  <Button onClick={handleAddWallet} colorScheme="blue">
+                    Add Wallet
+                  </Button>
+                </HStack>
+              </FormControl>
 
-        <Box as="form" onSubmit={handleSubmit}>
-          <VStack spacing={4} align="stretch">
-            <FormControl>
-              <FormLabel>Wallet Address</FormLabel>
-              <HStack>
-                <Input
-                  value={newWallet}
-                  onChange={(e) => setNewWallet(e.target.value)}
-                  placeholder="Enter wallet address"
-                />
-                <Button onClick={handleAddWallet} colorScheme="blue">
-                  Add Wallet
-                </Button>
-              </HStack>
-            </FormControl>
+              {wallets.length > 0 && (
+                <Box color="brand.text">
+                  <Text fontWeight="bold" mb={2}>
+                    Added Wallets:
+                  </Text>
+                  <VStack align="stretch">
+                    {wallets.map((wallet, index) => (
+                      <Text key={index}>{wallet}</Text>
+                    ))}
+                  </VStack>
+                </Box>
+              )}
 
-            {wallets.length > 0 && (
-              <Box color="brand.text">
-                <Text fontWeight="bold" mb={2}>
-                  Added Wallets:
-                </Text>
-                <VStack align="stretch">
-                  {wallets.map((wallet, index) => (
-                    <Text key={index}>{wallet}</Text>
-                  ))}
-                </VStack>
-              </Box>
-            )}
-
-            <Button type="submit" colorScheme="orange">
-              Claim Airdrop
-            </Button>
-          </VStack>
-        </Box>
+              <Button type="submit" colorScheme="orange">
+                Claim Airdrop
+              </Button>
+            </VStack>
+          </Box>
+        ) : (
+          <LoginCard />
+        )}
         {isFlagged && (
           <Container>
             <Stack spacing={4}>
@@ -208,15 +212,6 @@ export default function AirdropClaimPage({
             </Stack>
           </Container>
         )}
-
-        {/* <Box>
-          <Heading as="h2" size="lg" mb={4}>
-            Airdrop Details:
-          </Heading>
-          <Box as="pre" p={4} borderRadius="md" whiteSpace="pre-wrap">
-            {JSON.stringify(airdropDetails, null, 2)}
-          </Box>
-        </Box> */}
       </VStack>
     </Container>
   );
