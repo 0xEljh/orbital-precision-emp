@@ -56,6 +56,16 @@ export const airdrops = createTable("airdrop", {
   maxReward: varchar("max_reward", { length: 255 }).notNull(),
 });
 
+export const airdropWallets = createTable("airdrop_wallet", {
+  airdropId: integer("airdrop_id")
+    .notNull()
+    .references(() => airdrops.id),
+  walletAddress: varchar("wallet_address", { length: 255 }).notNull(),
+  addedAt: timestamp("added_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
 // export const userAirdrops = createTable("user_airdrop", {
 //   userId: varchar("user_id", { length: 255 }).notNull().references(() => users.id),
 //   airdropId: integer("airdrop_id").notNull().references(() => airdrops.id),

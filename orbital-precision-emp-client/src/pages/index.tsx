@@ -22,8 +22,9 @@ export default function Home() {
               Fair airdrop campaigns, liberated from the bot invasion.
             </Heading>
             <Text fontSize="xl" mt="4" maxW="xl" mx="auto">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore
+              Ensure your airdrops reach real users, not bots. Get your fair
+              share of drops and not get dumped on by sybils. Our platform
+              provides secure and equitable distribution of tokens.
             </Text>
           </Box>
 

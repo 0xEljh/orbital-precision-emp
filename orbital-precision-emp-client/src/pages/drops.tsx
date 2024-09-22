@@ -1,3 +1,4 @@
+import { api } from "@/utils/api";
 import {
   Avatar,
   Box,
@@ -11,25 +12,6 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-
-// TODO: Fetch airdrops from the backend
-const airdrops = [
-  {
-    id: 1,
-    title: "Airdrop #1",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    token: {
-      name: "Orbital Token",
-      imageUrl: "https://s2.coinmarketcap.com/static/img/coins/64x64/13502.png",
-    },
-    project: {
-      name: "Project Name",
-      //   description: "Project description",
-    },
-    maxReward: "100",
-  },
-];
 
 export default function Drops() {
   return (
@@ -81,7 +63,7 @@ export default function Drops() {
           rowGap={{ base: "8", md: "12" }}
           columnGap="8"
         >
-          {airdrops.map((airdrop) => (
+          {api.airdrops.getAll.useQuery().data?.map((airdrop) => (
             <Link
               key={airdrop.id}
               _hover={{ textDecor: "none" }}
@@ -109,8 +91,8 @@ export default function Drops() {
                   </Stack>
                   <HStack>
                     <Avatar
-                      src={airdrop.token.imageUrl}
-                      name={airdrop.token.name}
+                      src={airdrop.tokenImageUrl ?? undefined}
+                      name={airdrop.tokenName}
                       boxSize="10"
                     />
                     <Box fontSize="sm">
